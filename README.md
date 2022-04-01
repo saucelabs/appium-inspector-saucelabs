@@ -2,6 +2,21 @@
 
 ![Appium Inspector icon](./docs/icon.png)
 
+<div style='padding:20px; background-color:#FF0000; color:#ffffff;margin-bottom: 20px;'>
+    <p style="font-size:18px"><b>NOTE</b></p>
+    <p>This project is a fork of the official <a href="https://github.com/appium/appium-inspector"  style="color: #ffffff; text-decoration:underline" target="_blank">appium-inspector</a>-project 
+        and holds a few Sauce Labs specific adjustments.</p>
+        <p>The biggest adjustment in this project is the ability to manually walk through your app on a Sauce Labs real device as if you were manually testing your 
+            app in the Sauce Labs Live Testing environment. Please read the <a href="./docs/SAUCE_MANUAL_TESTING.md" style="color: #ffffff; text-decoration:underline">Sauce Manul Testing</a>-doc for more information.</p>
+        <p style="font-size:18px"><b>Usage:</b></p>
+        <p>Please download the version you need from the <a href="https://github.com/saucelabs/appium-inspector-saucelabs/releases" style="color: #ffffff; text-decoration:underline">Releases</a>-tab.</p>
+        <p style="font-size:18px"><b>Issues:</b></p>
+        <p>If you face any issues with this fork then please submit an issue <a href="https://github.com/saucelabs/appium-inspector-saucelabs/issues"
+            style="color: #ffffff; text-decoration:underline">here</a>. We will determine if this is a fork specific issue, or an appium-inspector related issue. If it's the latter then we will copy your submitted issue to the official appium-inspector project.</p>
+        <p style="font-size:18px"><b>Development:</b></p>
+        <p>Please check <a href="./docs/SAUCE_MANUAL_TESTING.md" style="color: #ffffff; text-decoration:underline">this</a>-document on how to sync/work/release a new version.</p>
+</div>
+
 A GUI inspector for mobile apps and more, powered by a (separately installed) Appium server. When you're using it to inspect a mobile app, it looks like this:
 
 ![Appium Inspector screenshot](./docs/inspector-window.png)
@@ -51,18 +66,18 @@ Please try to call `codesign --deep --sign - /Applications/Appium\ Inspector.app
 
 ### Supported cloud platforms
 
-| Platform                                 | Docs                                                                                           |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| [Sauce Labs](https://saucelabs.com)      | [Documentation](https://wiki.saucelabs.com/), [Manual Testing](./docs/SAUCE_MANUAL_TESTING.md) |
-| [HeadSpin](https://headspin.io)          | [Documentation](https://headspin.io/)                                                          |
-| [Browserstack](https://browserstack.com) | [Documentation](https://www.browserstack.com/docs)                                             |
-| [Bitbar](https://bitbar.com)             | [Documentation](http://docs.bitbar.com/)                                                       |
-| [Kobiton](https://kobiton.com)           | [Documentation](https://docs.kobiton.com/)                                                     |
-| [Perfecto](https://www.perfecto.io)      | [Documentation](https://developers.perfectomobile.com/display/PD/Appium)                       |
-| [Pcloudy](https://www.pcloudy.com)       | [Documentation](https://www.pcloudy.com/mobile-application-testing-documentation)              |
-| [TestingBot](https://testingbot.com)     | [Documentation](https://testingbot.com/support)                                                |
-| [Experitest](http://www.experitest.com)  | [Documentation](https://docs.experitest.com/display/TE/Appium)                                 |
-| [Robotic.mobi](https://www.robotic.mobi) | [Documentation](https://robotic.mobi/appium-remote)                                            |
+| Platform                                 | Docs                                                                              |
+| ---------------------------------------- | --------------------------------------------------------------------------------- |
+| [Sauce Labs](https://saucelabs.com)      | [Documentation](https://wiki.saucelabs.com/)                                      |
+| [HeadSpin](https://headspin.io)          | [Documentation](https://headspin.io/)                                             |
+| [Browserstack](https://browserstack.com) | [Documentation](https://www.browserstack.com/docs)                                |
+| [Bitbar](https://bitbar.com)             | [Documentation](http://docs.bitbar.com/)                                          |
+| [Kobiton](https://kobiton.com)           | [Documentation](https://docs.kobiton.com/)                                        |
+| [Perfecto](https://www.perfecto.io)      | [Documentation](https://developers.perfectomobile.com/display/PD/Appium)          |
+| [Pcloudy](https://www.pcloudy.com)       | [Documentation](https://www.pcloudy.com/mobile-application-testing-documentation) |
+| [TestingBot](https://testingbot.com)     | [Documentation](https://testingbot.com/support)                                   |
+| [Experitest](http://www.experitest.com)  | [Documentation](https://docs.experitest.com/display/TE/Appium)                    |
+| [Robotic.mobi](https://www.robotic.mobi) | [Documentation](https://robotic.mobi/appium-remote)                               |
 
 ## Requirements
 
