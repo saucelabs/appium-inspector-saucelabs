@@ -20,7 +20,7 @@ If you face any issues with this fork then please submit an issue [here](https:/
 
 ## Working on this fork
 
-Make sure you follow the steps explained [here](#development). You can then check [this](./docs/SAUCE_MANUAL_TESTING.md)-document on how to sync/work/release a new version.</p>
+Make sure you follow the steps explained [here](#development). You can then check [this](./docs/SAUCE_DEVELOPMENT.md)-document on how to sync/work/release a new version.</p>
 
 ---
 
