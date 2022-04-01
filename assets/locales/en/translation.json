@@ -355,10 +355,11 @@
   "sauceMenuCameraInjectionButtonFail": "Fail",
   "sauceExplanationImportant": "Important information",
   "sauceExplanationInfo": "You are watching the live video streaming of the device that you've selected. You can interact with it as if you would do in Sauce Labs Live/Manual testing.",
-  "sauceExplanationIssues": "Any issues related to the usage of this this screen need to be submitted to the Appium Inspector project. Please provide all necessary information like:",
+  "sauceExplanationIssues": "Any issues related need to be submitted ",
+  "sauceExplanationFileBug": "here. ",
+  "sauceExplanationIssuesTwo": "Please provide all necessary information like:",
   "sauceExplanationIssuesList1": "Device Name",
   "sauceExplanationIssuesList2": "OS version",
   "sauceExplanationIssuesList3": "Mobile app or browser",
-  "sauceExplanationIssuesList4": "Data Center (US/EU)",
-  "sauceExplanationIssuesPart2": "Also mention clearly in the title and description that you are facing an issue on this screen."
+  "sauceExplanationIssuesList4": "Data Center (US/EU)"
 }

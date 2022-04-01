@@ -28,11 +28,9 @@ Appium Inspector now allows you switch between getting the source code with Appi
 
 ## Issues
 
-Any issues related to the usage of this this screen need to be submitted to the Appium Inspector project. Please provide all necessary information like:
+Any issues related need to be submitted [here](https://github.com/saucelabs/appium-inspector-saucelabs/issues). Please provide all necessary information like:
 
 - Device Name
 - OS version
 - Mobile app or browser
 - Data Center (US/EU)
-
-Also mention clearly in the title and description that you are facing an issue on this screen.
