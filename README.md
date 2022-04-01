@@ -2,20 +2,23 @@
 
 ![Appium Inspector icon](./docs/icon.png)
 
-<div style='padding:20px; background-color:#FF0000; color:#ffffff;margin-bottom: 20px;'>
-    <p style="font-size:18px"><b>NOTE</b></p>
-    <p>This project is a fork of the official <a href="https://github.com/appium/appium-inspector"  style="color: #ffffff; text-decoration:underline" target="_blank">appium-inspector</a>-project 
-        and holds a few Sauce Labs specific adjustments.</p>
-        <p>The biggest adjustment in this project is the ability to manually walk through your app on a Sauce Labs real device as if you were manually testing your 
-            app in the Sauce Labs Live Testing environment. Please read the <a href="./docs/SAUCE_MANUAL_TESTING.md" style="color: #ffffff; text-decoration:underline">Sauce Manul Testing</a>-doc for more information.</p>
-        <p style="font-size:18px"><b>Usage:</b></p>
-        <p>Please download the version you need from the <a href="https://github.com/saucelabs/appium-inspector-saucelabs/releases" style="color: #ffffff; text-decoration:underline">Releases</a>-tab.</p>
-        <p style="font-size:18px"><b>Issues:</b></p>
-        <p>If you face any issues with this fork then please submit an issue <a href="https://github.com/saucelabs/appium-inspector-saucelabs/issues"
-            style="color: #ffffff; text-decoration:underline">here</a>. We will determine if this is a fork specific issue, or an appium-inspector related issue. If it's the latter then we will copy your submitted issue to the official appium-inspector project.</p>
-        <p style="font-size:18px"><b>Development:</b></p>
-        <p>Please check <a href="./docs/SAUCE_MANUAL_TESTING.md" style="color: #ffffff; text-decoration:underline">this</a>-document on how to sync/work/release a new version.</p>
-</div>
+---
+
+#IMPORTANT NOTE
+This project is a fork of the official [appium-inspector](https://github.com/appium/appium-inspector)-project and holds a few Sauce Labs specific adjustments.
+
+The biggest adjustment in this project is the ability to manually walk through your app on a Sauce Labs real device as if you were manually testing your app in the Sauce Labs Live Testing environment. Please read the [Sauce Manual Testing](./docs/SAUCE_MANUAL_TESTING.md)-doc for more information.
+
+##Usage
+Follow the instructions [here](#installation). You can download the version you need from the [Releases](https://github.com/saucelabs/appium-inspector-saucelabs/releases)-tab.
+
+##Issues
+If you face any issues with this fork then please submit an issue [here](https://github.com/saucelabs/appium-inspector-saucelabs/issues). We will determine if this is a fork specific issue, or an appium-inspector related issue. If it's the latter then we will copy your submitted issue to the official appium-inspector project.
+
+##Working on this fork
+Make sure you follow the steps explained [here](#development). You can then check [this](./docs/SAUCE_MANUAL_TESTING.md)-document on how to sync/work/release a new version.</p>
+
+---
 
 A GUI inspector for mobile apps and more, powered by a (separately installed) Appium server. When you're using it to inspect a mobile app, it looks like this:
 
