@@ -10,6 +10,10 @@ This project is a fork of the official [appium-inspector](https://github.com/app
 
 The biggest adjustment in this project is the ability to manually walk through your app on a Sauce Labs real device as if you were manually testing your app in the Sauce Labs Live Testing environment. Please read the [Sauce Manual Testing](./docs/SAUCE_MANUAL_TESTING.md)-doc for more information.
 
+The reason why this became a fork instead of a new feature in the existing Appium Inspector is that, in consultation with the Appium core team, it was decided that it was better to no implement vendor specific features into Appium Inspector. We agreed that a fork would be the best way to go forward.
+
+This for fork will be updated with all new features/fixes of the original [Appium Inspector](https://github.com/appium/appium-inspector)-project so you can see this as a Sauce Labs specific replacement of the/your current Appium Inspector.
+
 ## Usage
 
 Follow the instructions [here](#installation). You can download the version you need from the [Releases](https://github.com/saucelabs/appium-inspector-saucelabs/releases)-tab.
