@@ -174,7 +174,7 @@
     "@appium/fake-driver": "^2.2.0",
     "@babel/core": "^7.17.2",
     "@babel/eslint-parser": "^7.17.0",
-    "@babel/eslint-plugin": "^7.14.5",
+    "@babel/eslint-plugin": "^7.17.7",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
