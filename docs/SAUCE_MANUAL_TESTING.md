@@ -6,11 +6,15 @@ Appium Inspector now allows you switch between getting the source code with Appi
 
 ## How to use
 
+> Please make sure you check the [Important Notes](https://github.com/saucelabs/appium-inspector-saucelabs#important-migration-notes) and [Installation](https://github.com/saucelabs/appium-inspector-saucelabs#installation)-instructions/tips.
+
+When you've downloaded and installed the Sauce Labs Appium Inspector Fork you can do the following:
+
 - You can enable Live Testing on Sauce Labs Real Devices by clicking on the Video icon at the top of the screen, see the screenshot below.
 
   ![Appium Inspector screenshot](./inspector-window-sauce.png)
 
-- A new screen will be shown as seen below. In this screen you can interact with the device (with gestures or even with the keyboard by just start typing when an input field has focus) to get to the screen/state you want to go without manually interacting with your app as you would normally do with Appium Inspector. This will save you a lot of time.
+- A new screen will be shown as seen below. In this screen you can interact with the device (**with gestures or even with the keyboard by just start typing when an input field has focus**) to get to the screen/state you want to go without manually interacting with your app as you would normally do with Appium Inspector. This will save you a lot of time.
 
   When you hover over the screen of the device you will see that you mouse will change into an orange dot, which mimics your finger.
 
