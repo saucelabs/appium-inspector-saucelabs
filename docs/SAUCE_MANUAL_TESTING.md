@@ -29,6 +29,10 @@ When you've downloaded and installed the Sauce Labs Appium Inspector Fork you ca
 - Camera Injection can also be used by clicking on the Camera-icon and selecting an image to be uploaded.
 
   ![Appium Inspector Sauce Manual Testing](./sauce-manual-testing-camera-injection.png)
+  
+### Demo
+
+https://user-images.githubusercontent.com/11979740/161234345-61f93e35-c5d9-411e-9c3f-568aabb655bc.mp4
 
 ## Issues
 
