@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
 import { Spin } from 'antd';
+import { ipcRenderer } from 'electron';
 import { SCREENSHOT_INTERACTION_MODE } from '../shared';
 import TouchDot from './TouchDot';
 import styles from './StreamScreen.css';
+import { SAUCE_IPC_TYPES } from '../../../../main/sauce';
 
 /**
  * The video streaming screen
@@ -58,26 +60,30 @@ const StreamScreen = ({
       let key;
       switch (event.key) {
         case KEY_CODES.arrowLeft:
-          key = '\uE012';
+          key = isIOS ? '\uE012' : event.key;
           break;
         case KEY_CODES.arrowRight:
-          key = '\uE014';
+          key = isIOS ? '\uE014' : event.key;
           break;
         case KEY_CODES.backspace:
-          key = isIOS ? '\b' : '\uE003';
+          key = isIOS ? '\b' : event.key;
           break;
         case KEY_CODES.enter:
-          key = isIOS ? '\n' : '\uE007';
+          key = isIOS ? '\n' : event.key;
           break;
         default:
           key = event.key;
           break;
       }
-      await applyAppiumMethod({
-        methodName: SCREENSHOT_INTERACTION_MODE.TYPE,
-        args: [key],
-        skipRefresh: true,
-      });
+      if (isIOS) {
+        return await applyAppiumMethod({
+          methodName: SCREENSHOT_INTERACTION_MODE.TYPE,
+          args: [key],
+          skipRefresh: true,
+        });
+      }
+
+      ipcRenderer.send(SAUCE_IPC_TYPES.WS_SEND_KEY, key);
     }
   }, []);
   /**

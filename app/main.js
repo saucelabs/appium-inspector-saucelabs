@@ -4,7 +4,13 @@ import { installExtensions } from '../gui-common/debug';
 import { setupMainWindow } from '../gui-common/windows';
 import { rebuildMenus } from './main/menus';
 import settings from './shared/settings';
-import { closeWebsocket, runWebSocket, SAUCE_IPC_TYPES } from './main/sauce';
+import {
+  closeWebsocket,
+  runWebSocket,
+  sendKeys,
+  sendTouch,
+  SAUCE_IPC_TYPES,
+} from './main/sauce';
 
 let mainWindow = null;
 const isDev = process.env.NODE_ENV === 'development';
@@ -22,6 +28,8 @@ app.on('window-all-closed', () => {
  */
 ipcMain.on(SAUCE_IPC_TYPES.RUN_WS, runWebSocket);
 ipcMain.on(SAUCE_IPC_TYPES.CLOSE_WS, closeWebsocket);
+ipcMain.on(SAUCE_IPC_TYPES.WS_SEND_KEY, sendKeys);
+ipcMain.on(SAUCE_IPC_TYPES.WS_SEND_TOUCH, sendTouch);
 
 app.on('ready', async () => {
   await installExtensions();

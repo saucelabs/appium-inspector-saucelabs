@@ -14,14 +14,14 @@ const NATIVE_APP = 'NATIVE_APP';
 let _instance = null;
 
 export default class AppiumClient {
-  constructor (driver) {
+  constructor(driver) {
     this.driver = driver;
     this.elementCache = {};
     this.elVarCount = 0;
     this.elArrayVarCount = 0;
   }
 
-  async run (params) {
+  async run(params) {
     const {
       methodName, // Optional. Name of method being provided
       strategy, // Optional. Element locator strategy
@@ -99,7 +99,7 @@ export default class AppiumClient {
     return res;
   }
 
-  async executeMethod ({ elementId, methodName, args, skipRefresh, appMode }) {
+  async executeMethod({ elementId, methodName, args, skipRefresh, appMode }) {
     let cachedEl;
     let res = {};
     if (!_.isArray(args) && !_.isUndefined(args)) {
@@ -181,9 +181,9 @@ export default class AppiumClient {
     await Bluebird.delay(500);
 
     let contextUpdate = {},
-        sourceUpdate = {},
-        screenshotUpdate = {},
-        windowSizeUpdate = {};
+      sourceUpdate = {},
+      screenshotUpdate = {},
+      windowSizeUpdate = {};
     if (!skipRefresh) {
       screenshotUpdate = await this.getScreenshotUpdate();
       windowSizeUpdate = await this.getWindowUpdate();
@@ -203,7 +203,7 @@ export default class AppiumClient {
     };
   }
 
-  async fetchElements ({ strategy, selector }) {
+  async fetchElements({ strategy, selector }) {
     const els = await this.driver.findElements(strategy, selector);
 
     this.elArrayVarCount += 1;
@@ -237,7 +237,7 @@ export default class AppiumClient {
     };
   }
 
-  async fetchElement ({ strategy, selector }) {
+  async fetchElement({ strategy, selector }) {
     const start = Date.now();
     let element = null;
     try {
@@ -267,7 +267,7 @@ export default class AppiumClient {
     };
   }
 
-  async getWindowUpdate () {
+  async getWindowUpdate() {
     let windowSize, windowSizeError;
     const {
       client: {
@@ -291,16 +291,16 @@ export default class AppiumClient {
     return { windowSize, windowSizeError };
   }
 
-  async getContextUpdate () {
+  async getContextUpdate() {
     let contexts,
-        contextsError,
-        currentContext,
-        currentContextError,
-        pixelRatio,
-        platformName,
-        statBarHeight,
-        viewportRect,
-        webViewPosition;
+      contextsError,
+      currentContext,
+      currentContextError,
+      pixelRatio,
+      platformName,
+      statBarHeight,
+      viewportRect,
+      webViewPosition;
     if (!(await this.hasContextsCommand())) {
       return { currentContext: null, contexts: [] };
     }
@@ -382,7 +382,7 @@ export default class AppiumClient {
     return { contexts, contextsError, currentContext, currentContextError };
   }
 
-  async getSourceUpdate () {
+  async getSourceUpdate() {
     try {
       const source = parseSource(await this.driver.getPageSource());
       return { source };
@@ -391,7 +391,7 @@ export default class AppiumClient {
     }
   }
 
-  async getScreenshotUpdate () {
+  async getScreenshotUpdate() {
     try {
       const screenshot = await this.driver.takeScreenshot();
       return { screenshot };
@@ -406,7 +406,7 @@ export default class AppiumClient {
    * @returns {boolean} True if the app under test supports contexts command.
    *
    */
-  async hasContextsCommand () {
+  async hasContextsCommand() {
     try {
       await this.driver.getContexts();
       return true;
@@ -429,7 +429,7 @@ export default class AppiumClient {
    *   handle?: string;        // the id of the active page in the webview of Android
    * }[];
    */
-  parseAndroidContexts (contexts) {
+  parseAndroidContexts(contexts) {
     const parsedWebviews = [];
 
     // Walk over every context and add all webviews into the parsedWebviews array
