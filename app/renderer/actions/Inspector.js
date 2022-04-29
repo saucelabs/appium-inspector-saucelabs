@@ -6,7 +6,7 @@ import { xmlToJSON } from '../util';
 import frameworks from '../lib/client-frameworks';
 import { getSetting, setSetting, SAVED_FRAMEWORK } from '../../shared/settings';
 import i18n from '../../configs/i18next.config.renderer';
-import AppiumClient from '../lib/appium-client';
+import AppiumClient, { NATIVE_APP } from '../lib/appium-client';
 import { notification } from 'antd';
 
 export const SET_SESSION_DETAILS = 'SET_SESSION_DETAILS';
@@ -182,23 +182,10 @@ export function applyClientMethod (params) {
     try {
       dispatch({ type: METHOD_CALL_REQUESTED });
       const callAction = callClientMethod(params);
-      const {
-        contexts,
-        contextsError,
-        currentContext,
-        currentContextError,
-        source,
-        screenshot,
-        windowSize,
-        commandRes,
-        sourceError,
-        screenshotError,
-        windowSizeError,
-        variableName,
-        variableIndex,
-        strategy,
-        selector,
-      } = await callAction(dispatch, getState);
+      const {contexts, contextsError, commandRes, currentContext, currentContextError,
+             source, screenshot, windowSize, sourceError,
+             screenshotError, windowSizeError, variableName,
+             variableIndex, strategy, selector} = await callAction(dispatch, getState);
 
       if (isRecording) {
         // Add 'findAndAssign' line of code. Don't do it for arrays though. Arrays already have 'find' expression
@@ -361,6 +348,7 @@ export function toggleShowBoilerplate () {
 
 export function setSessionDetails (driver, sessionDetails, mode) {
   return (dispatch) => {
+    dispatch({type: SET_SESSION_DETAILS, driver, sessionDetails, mode});
     dispatch({ type: SET_SESSION_DETAILS, driver, sessionDetails, mode });
   };
 }
@@ -512,6 +500,10 @@ export function selectAppMode (mode) {
     // if we're transitioning to hybrid mode, do a pre-emptive search for contexts
     if (appMode !== mode && mode === APP_MODE.WEB_HYBRID) {
       const action = applyClientMethod({ methodName: 'getPageSource' });
+      await action(dispatch, getState);
+    }
+    if (appMode !== mode && mode === APP_MODE.NATIVE) {
+      const action = applyClientMethod({ methodName: 'switchContext', args: [NATIVE_APP] });
       await action(dispatch, getState);
     }
   };

@@ -27,6 +27,7 @@ import { Web2Driver } from 'web2driver';
 import { addVendorPrefixes } from '../util';
 import ky from 'ky/umd';
 import moment from 'moment';
+import { APP_MODE } from '../components/Inspector/shared';
 
 export const NEW_SESSION_REQUESTED = 'NEW_SESSION_REQUESTED';
 export const NEW_SESSION_BEGAN = 'NEW_SESSION_BEGAN';
@@ -348,6 +349,35 @@ export function newSession (caps, attachSessId = null) {
         }
         https = session.server.browserstack.ssl = parseInt(port, 10) === 443;
         break;
+      case ServerTypes.lambdatest:
+        host = session.server.lambdatest.hostname = process.env.LAMBDATEST_HOST || 'mobile-hub.lambdatest.com';
+        port = session.server.lambdatest.port = process.env.LAMBDATEST_PORT || 443;
+        path = session.server.lambdatest.path = '/wd/hub';
+        username = session.server.lambdatest.username || process.env.LAMBDATEST_USERNAME;
+        if (desiredCapabilities.hasOwnProperty.call(desiredCapabilities, 'lt:options')) {
+          desiredCapabilities['lt:options'].source = 'appiumdesktop';
+          desiredCapabilities['lt:options'].isRealMobile = true;
+          if (session.server.advanced.useProxy) {
+            desiredCapabilities['lt:options'].proxyUrl = isUndefined(session.server.advanced.proxy) ? '' : session.server.advanced.proxy;
+          }
+        } else {
+          desiredCapabilities['lambdatest:source'] = 'appiumdesktop';
+          desiredCapabilities['lambdatest:isRealMobile'] = true;
+          if (session.server.advanced.useProxy) {
+            desiredCapabilities['lambdatest:proxyUrl'] = isUndefined(session.server.advanced.proxy) ? '' : session.server.advanced.proxy;
+          }
+        }
+        accessKey = session.server.lambdatest.accessKey || process.env.LAMBDATEST_ACCESS_KEY;
+        if (!username || !accessKey) {
+          notification.error({
+            message: i18n.t('Error'),
+            description: i18n.t('lambdatestCredentialsRequired'),
+            duration: 4,
+          });
+          return;
+        }
+        https = session.server.lambdatest.ssl = parseInt(port, 10) === 443;
+        break;
       case ServerTypes.bitbar:
         host = process.env.BITBAR_HOST || 'appium.bitbar.com';
         port = session.server.bitbar.port = 443;
@@ -534,7 +564,7 @@ export function newSession (caps, attachSessId = null) {
         serverOpts.isMobile = true;
         // Need to set connectionRetryTimeout as same as the new session request.
         // TODO: make configurable?
-        serverOpts.connectionRetryTimeout = 120000;
+        serverOpts.connectionRetryTimeout = 5 * 60 * 1000;
         driver = await Web2Driver.attachToSession(attachSessId, serverOpts);
         driver._isAttachedSession = true;
       } else {
@@ -552,7 +582,7 @@ export function newSession (caps, attachSessId = null) {
     // The homepage arg in ChromeDriver is not working with Appium. iOS can have a default url, but
     // we want to keep the process equal to prevent complexity so we launch a default url here to make
     // sure we don't start with an empty page which will not show proper HTML in the inspector
-    const { browserName = '' } = desiredCapabilities;
+    const {browserName = ''} = desiredCapabilities;
     let mode = APP_MODE.NATIVE;
 
     if (browserName.trim() !== '') {
@@ -564,19 +594,15 @@ export function newSession (caps, attachSessId = null) {
 
     // pass some state to the inspector that it needs to build recorder
     // code boilerplate
-    const action = setSessionDetails(
-      driver,
-      {
-        desiredCapabilities,
-        host,
-        port,
-        path,
-        username,
-        accessKey,
-        https,
-      },
-      mode
-    );
+    const action = setSessionDetails(driver, {
+      desiredCapabilities,
+      host,
+      port,
+      path,
+      username,
+      accessKey,
+      https,
+    }, mode);
     action(dispatch);
     dispatch(push('/inspector'));
   };

@@ -10,7 +10,7 @@ import {
   APP_MODE,
 } from '../components/Inspector/shared';
 
-const NATIVE_APP = 'NATIVE_APP';
+export const NATIVE_APP = 'NATIVE_APP';
 let _instance = null;
 
 export default class AppiumClient {
@@ -123,19 +123,17 @@ export default class AppiumClient {
       // Specially handle the tap and swipe method
       if (methodName === SCREENSHOT_INTERACTION_MODE.TAP) {
         const [x, y] = args;
-        res = await this.driver.performActions([
-          {
-            type: 'pointer',
-            id: 'finger1',
-            parameters: { pointerType: 'touch' },
-            actions: [
-              { type: 'pointerMove', duration: 0, x, y },
-              { type: 'pointerDown', button: 0 },
-              { type: 'pause', duration: 100 },
-              { type: 'pointerUp', button: 0 },
-            ],
-          },
-        ]);
+        res = await this.driver.performActions([{
+          type: 'pointer',
+          id: 'finger1',
+          parameters: {pointerType: 'touch'},
+          actions: [
+            {type: 'pointerMove', duration: 0, x, y},
+            {type: 'pointerDown', button: 0},
+            {type: 'pause', duration: 100},
+            {type: 'pointerUp', button: 0}
+          ]
+        }]);
       } else if (methodName === SCREENSHOT_INTERACTION_MODE.SWIPE) {
         const [startX, startY, endX, endY] = args;
         res = await this.driver.performActions([
