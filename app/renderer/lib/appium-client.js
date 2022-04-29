@@ -1,7 +1,14 @@
 import _ from 'lodash';
 import Bluebird from 'bluebird';
-import {getWebviewStatusAddressBarHeight, parseSource, setHtmlElementAttributes} from './webview-helpers';
-import {SCREENSHOT_INTERACTION_MODE, APP_MODE} from '../components/Inspector/shared';
+import {
+  getWebviewStatusAddressBarHeight,
+  parseSource,
+  setHtmlElementAttributes,
+} from './webview-helpers';
+import {
+  SCREENSHOT_INTERACTION_MODE,
+  APP_MODE,
+} from '../components/Inspector/shared';
 
 export const NATIVE_APP = 'NATIVE_APP';
 let _instance = null;
@@ -29,8 +36,7 @@ export default class AppiumClient {
     if (methodName === 'quit') {
       try {
         await this.driver.quit();
-      } catch (ign) {
-      }
+      } catch (ign) {}
 
       _instance = null;
 
@@ -40,33 +46,60 @@ export default class AppiumClient {
         source: null,
         screenshot: null,
         windowSize: null,
-        result: null
+        result: null,
       };
     }
 
     let res = {};
     if (methodName) {
       if (elementId) {
-        console.log(`Handling client method request with method '${methodName}', args ${JSON.stringify(args)} and elementId ${elementId}`); // eslint-disable-line no-console
-        res = await this.executeMethod({elementId, methodName, args, skipRefresh, appMode});
+        // eslint-disable-next-line no-console
+        console.log(
+          `Handling client method request with method '${methodName}', args ${JSON.stringify(
+            args
+          )} and elementId ${elementId}`
+        );
+        res = await this.executeMethod({
+          elementId,
+          methodName,
+          args,
+          skipRefresh,
+          appMode,
+        });
       } else {
-        console.log(`Handling client method request with method '${methodName}' and args ${JSON.stringify(args)}`); // eslint-disable-line no-console
-        res = await this.executeMethod({methodName, args, skipRefresh, appMode});
+        // eslint-disable-next-line no-console
+        console.log(
+          `Handling client method request with method '${methodName}' and args ${JSON.stringify(
+            args
+          )}`
+        );
+        res = await this.executeMethod({
+          methodName,
+          args,
+          skipRefresh,
+          appMode,
+        });
       }
     } else if (strategy && selector) {
       if (fetchArray) {
-        console.log(`Fetching elements with selector '${selector}' and strategy ${strategy}`); // eslint-disable-line no-console
-        res = await this.fetchElements({strategy, selector});
+        // eslint-disable-next-line no-console
+        console.log(
+          `Fetching elements with selector '${selector}' and strategy ${strategy}`
+        );
+        res = await this.fetchElements({ strategy, selector });
       } else {
-        console.log(`Fetching an element with selector '${selector}' and strategy ${strategy}`); // eslint-disable-line no-console
-        res = await this.fetchElement({strategy, selector});
+        // eslint-disable-next-line no-console
+        console.log(
+          `Fetching an element with selector '${selector}' and strategy ${strategy}`
+        );
+        res = await this.fetchElement({ strategy, selector });
       }
     }
 
     return res;
   }
 
-  async executeMethod ({elementId, methodName, args, skipRefresh, appMode}) {
+  async executeMethod ({ elementId, methodName, args, skipRefresh, appMode }) {
     let cachedEl;
     let res = {};
     if (!_.isArray(args) && !_.isUndefined(args)) {
@@ -103,18 +136,41 @@ export default class AppiumClient {
         }]);
       } else if (methodName === SCREENSHOT_INTERACTION_MODE.SWIPE) {
         const [startX, startY, endX, endY] = args;
-        res = await this.driver.performActions([{
-          type: 'pointer',
-          id: 'finger1',
-          parameters: {pointerType: 'touch'},
-          actions: [
-            {type: 'pointerMove', duration: 0, x: startX, y: startY},
-            {type: 'pointerDown', button: 0},
-            {type: 'pointerMove', duration: 750, origin: 'viewport', x: endX, y: endY},
-            {type: 'pointerUp', button: 0}
-          ]
-        }]);
-      } else if (methodName !== 'getPageSource' && methodName !== 'takeScreenshot') {
+        res = await this.driver.performActions([
+          {
+            type: 'pointer',
+            id: 'finger1',
+            parameters: { pointerType: 'touch' },
+            actions: [
+              { type: 'pointerMove', duration: 0, x: startX, y: startY },
+              { type: 'pointerDown', button: 0 },
+              {
+                type: 'pointerMove',
+                duration: 750,
+                origin: 'viewport',
+                x: endX,
+                y: endY,
+              },
+              { type: 'pointerUp', button: 0 },
+            ],
+          },
+        ]);
+      } else if (methodName === SCREENSHOT_INTERACTION_MODE.TYPE) {
+        const [key] = args;
+        res = await this.driver.performActions([
+          {
+            type: 'key',
+            id: 'keyboard',
+            actions: [
+              { type: 'keyDown', value: key },
+              { type: 'keyUp', value: key },
+            ],
+          },
+        ]);
+      } else if (
+        methodName !== 'getPageSource' &&
+        methodName !== 'takeScreenshot'
+      ) {
         res = await this.driver[methodName].apply(this.driver, args);
       }
     }
@@ -122,7 +178,10 @@ export default class AppiumClient {
     // Give the source/screenshot time to change before taking the screenshot
     await Bluebird.delay(500);
 
-    let contextUpdate = {}, sourceUpdate = {}, screenshotUpdate = {}, windowSizeUpdate = {};
+    let contextUpdate = {},
+        sourceUpdate = {},
+        screenshotUpdate = {},
+        windowSizeUpdate = {};
     if (!skipRefresh) {
       screenshotUpdate = await this.getScreenshotUpdate();
       windowSizeUpdate = await this.getWindowUpdate();
@@ -142,7 +201,7 @@ export default class AppiumClient {
     };
   }
 
-  async fetchElements ({strategy, selector}) {
+  async fetchElements ({ strategy, selector }) {
     const els = await this.driver.findElements(strategy, selector);
 
     this.elArrayVarCount += 1;
@@ -165,12 +224,18 @@ export default class AppiumClient {
       return res;
     });
 
-    this.elementCache = {...this.elementCache, ...elements};
+    this.elementCache = { ...this.elementCache, ...elements };
 
-    return {variableName, variableType, strategy, selector, elements: elementList};
+    return {
+      variableName,
+      variableType,
+      strategy,
+      selector,
+      elements: elementList,
+    };
   }
 
-  async fetchElement ({strategy, selector}) {
+  async fetchElement ({ strategy, selector }) {
     const start = Date.now();
     let element = null;
     try {
@@ -202,14 +267,18 @@ export default class AppiumClient {
 
   async getWindowUpdate () {
     let windowSize, windowSizeError;
-    const {client: {capabilities: {deviceScreenSize, platformName}}} = this.driver;
+    const {
+      client: {
+        capabilities: { deviceScreenSize, platformName },
+      },
+    } = this.driver;
     try {
       // The call doesn't need to be made for Android for two reasons
       // - when appMode is hybrid Chrome driver doesn't know this command
       // - the data is already on the driver
       if (_.toLower(platformName) === 'android') {
         const [width, height] = deviceScreenSize.split('x');
-        windowSize = {width, height, x: 0, y: 0};
+        windowSize = { width, height, x: 0, y: 0 };
       } else {
         windowSize = await this.driver.getWindowRect();
       }
@@ -217,7 +286,7 @@ export default class AppiumClient {
       windowSizeError = e;
     }
 
-    return {windowSize, windowSizeError};
+    return { windowSize, windowSizeError };
   }
 
   async getContextUpdate () {
@@ -230,8 +299,8 @@ export default class AppiumClient {
         statBarHeight,
         viewportRect,
         webViewPosition;
-    if (!await this.hasContextsCommand()) {
-      return {currentContext: null, contexts: []};
+    if (!(await this.hasContextsCommand())) {
+      return { currentContext: null, contexts: [] };
     }
 
     try {
@@ -245,7 +314,8 @@ export default class AppiumClient {
       await this.driver.switchContext(NATIVE_APP);
     }
 
-    ({platformName, pixelRatio, statBarHeight, viewportRect} = await this.driver.getSession());
+    ({ platformName, pixelRatio, statBarHeight, viewportRect } =
+      await this.driver.getSession());
     const isAndroid = _.toLower(platformName) === 'android';
 
     try {
@@ -255,7 +325,6 @@ export default class AppiumClient {
       contextsError = e;
     }
 
-
     if (currentContext !== NATIVE_APP) {
       try {
         // Get the webview offset
@@ -263,8 +332,12 @@ export default class AppiumClient {
           // The viewport rectangles are based on the screen density,
           // iOS needs CSS pixels
           webViewPosition = {
-            x: isAndroid ? viewportRect.left : Math.round(viewportRect.left / pixelRatio),
-            y: isAndroid ? viewportRect.top : Math.round(viewportRect.top / pixelRatio),
+            x: isAndroid
+              ? viewportRect.left
+              : Math.round(viewportRect.left / pixelRatio),
+            y: isAndroid
+              ? viewportRect.top
+              : Math.round(viewportRect.top / pixelRatio),
           };
         } else {
           // Fallback
@@ -276,8 +349,7 @@ export default class AppiumClient {
             webViewPosition = await el.getRect();
           }
         }
-      } catch (ign) {
-      }
+      } catch (ign) {}
       await this.driver.switchContext(currentContext);
     }
 
@@ -294,36 +366,35 @@ export default class AppiumClient {
             x: 0,
             y: await this.driver.executeScript(
               `return (${getWebviewStatusAddressBarHeight}).apply(null, arguments)`,
-              [{platformName, statBarHeight}],
+              [{ platformName, statBarHeight }]
             ),
           };
         }
         await this.driver.executeScript(
           `return (${setHtmlElementAttributes}).apply(null, arguments)`,
-          [{platformName, webviewStatusAddressBarHeight: webViewPosition.y}],
+          [{ platformName, webviewStatusAddressBarHeight: webViewPosition.y }]
         );
       }
-    } catch (ign) {
-    }
+    } catch (ign) {}
 
-    return {contexts, contextsError, currentContext, currentContextError};
+    return { contexts, contextsError, currentContext, currentContextError };
   }
 
   async getSourceUpdate () {
     try {
       const source = parseSource(await this.driver.getPageSource());
-      return {source};
+      return { source };
     } catch (err) {
-      return {sourceError: err};
+      return { sourceError: err };
     }
   }
 
   async getScreenshotUpdate () {
     try {
       const screenshot = await this.driver.takeScreenshot();
-      return {screenshot};
+      return { screenshot };
     } catch (err) {
-      return {screenshotError: err};
+      return { screenshotError: err };
     }
   }
 
@@ -337,8 +408,7 @@ export default class AppiumClient {
     try {
       await this.driver.getContexts();
       return true;
-    } catch (ign) {
-    }
+    } catch (ign) {}
 
     // If the app under test returns non JSON format response
     return false;
@@ -365,7 +435,7 @@ export default class AppiumClient {
       // Filter out all contexts that have a webviewName
       .filter((webview) => _.has(webview, 'webviewName'))
       // Now construct a new array with data
-      .map(({info, pages, webviewName}) => {
+      .map(({ info, pages, webviewName }) => {
         // The context result can have:
         // - no pages => this might be Chrome running in the background
         // - pages => this can be:
@@ -375,29 +445,37 @@ export default class AppiumClient {
           return;
         }
 
-        pages.filter((page) => {
-          // The description is a string and:
-          // 1. can contain a JSON string for webviews which can contain
-          //    an `attached`-value telling if the webview is active
-          // 2. can be an empty string, this is most of the times for tabs
-          //    in Chrome
-          const description = _.has(page, 'description') ? page.description : '';
-          let descriptionJSON = {attached: false};
-          try {
-            descriptionJSON = JSON.parse(page.description);
-          } catch (ign) {}
+        pages
+          .filter((page) => {
+            // The description is a string and:
+            // 1. can contain a JSON string for webviews which can contain
+            //    an `attached`-value telling if the webview is active
+            // 2. can be an empty string, this is most of the times for tabs
+            //    in Chrome
+            const description = _.has(page, 'description')
+              ? page.description
+              : '';
+            let descriptionJSON = { attached: false };
+            try {
+              descriptionJSON = JSON.parse(page.description);
+            } catch (ign) {}
 
-          // You can have multiple `type` of pages, like service workers
-          // We need to have pages with or 1. an attached view or 2. with an empty description
-          return page.type === 'page' && (description === '' || descriptionJSON.attached);
-        })
+            // You can have multiple `type` of pages, like service workers
+            // We need to have pages with or 1. an attached view or 2. with an empty description
+            return (
+              page.type === 'page' &&
+              (description === '' || descriptionJSON.attached)
+            );
+          })
           .map((page) => {
             parsedWebviews.push({
               id: webviewName,
-              ...(page && _.has(page, 'title') ? {title: page.title} : {}),
-              ...(page && _.has(page, 'url') ? {url: page.url} : {}),
-              ...(page && _.has(info, 'Android-Package') ? {packageName: info['Android-Package']} : {}),
-              ...(page && _.has(page, 'id') ? {handle: page.id} : {}),
+              ...(page && _.has(page, 'title') ? { title: page.title } : {}),
+              ...(page && _.has(page, 'url') ? { url: page.url } : {}),
+              ...(page && _.has(info, 'Android-Package')
+                ? { packageName: info['Android-Package'] }
+                : {}),
+              ...(page && _.has(page, 'id') ? { handle: page.id } : {}),
             });
           });
 
@@ -406,7 +484,7 @@ export default class AppiumClient {
 
     return [
       // The Android contexts dont have the `NATIVE_APP` context so add it here
-      {id: 'NATIVE_APP'},
+      { id: 'NATIVE_APP' },
       // Add the parsedWebviews, but make sure to filter out all undefined webviews
       ...parsedWebviews.filter(Boolean),
     ];

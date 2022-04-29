@@ -6,6 +6,7 @@ import InspectorPage from './containers/InspectorPage';
 import Spinner from '../../gui-common/components/Spinner/Spinner';
 import { ipcRenderer } from './polyfills';
 import i18n from '../configs/i18next.config.renderer';
+import ForkMessage from './components/Inspector/SauceLabs/ForkMessage';
 
 ipcRenderer.on('appium-language-changed', (event, message) => {
   if (i18n.language !== message.language) {
@@ -21,6 +22,7 @@ export default () => (
         <Route path="/session" component={SessionPage} />
         <Route path="/inspector" component={InspectorPage} />
       </Switch>
+      <ForkMessage />
     </App>
   </Suspense>
 );

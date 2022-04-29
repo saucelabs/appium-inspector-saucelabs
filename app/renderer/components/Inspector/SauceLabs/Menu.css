@@ -1,0 +1,119 @@
+.menuContainer {
+  /*NOTE: if you change these values then also change WebsocketHandler.js > getCanvasData*/
+  display: flex;
+  flex-direction: column;
+  max-height: 30vh;
+  min-height: 200px;
+  margin: 0 0 20px 20px;
+  width: 100px;
+}
+
+.header {
+  align-items: center;
+  background-color: rgb(232, 235, 241);
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  display: flex;
+  justify-content: center;
+  min-height: 24px;
+}
+
+.content {
+  background-color: #fff;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.row {
+  position: relative;
+}
+
+.footer {
+  background-color: rgb(232, 235, 241);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  min-height: 24px;
+}
+
+.menuButton {
+  color: rgba(0, 0, 0, 0.85);
+  background-color: #fff;
+  border: none;
+  font-size: 22px;
+  height: 50px;
+  outline: 0;
+  width: 50px;
+}
+
+.menuButton:hover {
+  color: #40a9ff;
+}
+
+.modalContainer {
+  background-color: #fff;
+  height: 170px;
+  padding: 16px;
+  width: 230px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+  position: absolute;
+  top: 0;
+  left: -240px;
+  z-index: 1030;
+}
+.modalHeader {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.modalDescription {
+  display: block;
+  font-size: 12px;
+  margin-top: 8px;
+}
+.uploadWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.inputFile {
+  display: none;
+}
+
+.uploadButton {
+  background-color: #1395f0;
+  color: #fff;
+  border: transparent;
+  padding: 7px 14px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+
+  display: block;
+}
+
+.biometricsButtonsWrapper {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 16px;
+  padding-top: 16px;
+}
+
+.biometricsStatusButton {
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  width: 64px;
+}

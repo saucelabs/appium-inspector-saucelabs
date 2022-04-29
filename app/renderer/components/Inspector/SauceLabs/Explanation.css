@@ -1,0 +1,10 @@
+.innerExplanationContainer {
+  /*NOTE: if you change these values then also change WebsocketHandler.js > getCanvasData*/
+  margin: 0 20px 20px 20px;
+  max-width: 400px;
+}
+
+.innerExplanationContainer .text {
+  margin: 10px 0;
+  display: block;
+}

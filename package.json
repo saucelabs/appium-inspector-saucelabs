@@ -1,6 +1,6 @@
 {
   "name": "appium-inspector",
-  "version": "2022.4.1",
+  "version": "2022.4.1-saucelabs.1",
   "description": "An app inspector for use with an Appium server",
   "repository": {
     "type": "git",
@@ -163,6 +163,7 @@
     "source-map-support": "^0.5.0",
     "uuid": "^8.2.0",
     "web2driver": "^3.0.3",
+    "ws": "^8.5.0",
     "xmldom": "^0.6.0",
     "xpath": "0.0.32"
   },
@@ -187,7 +188,11 @@
     "cross-env": "^7.0.0",
     "devtron": "^1.4.0",
     "electron": "^13.1.8",
+<<<<<<< HEAD
     "electron-builder": "^23.0.2",
+=======
+    "electron-builder": "23.0.2",
+>>>>>>> origin/feat/add-saucestreaming
     "electron-devtools-installer": "^3.0.0",
     "eslint-config-appium": "^4.5.0",
     "eslint-plugin-import": "^2.25.4",
