@@ -1,0 +1,107 @@
+.background {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 30;
+}
+
+.notification {
+  background-color: #ffffff;
+  border-radius: 4px;
+  margin-top: 15px;
+  box-sizing: border-box;
+  color: #999999;
+  width: 100%;
+  display: flex;
+  min-height: 125px;
+  max-height: 50vh;
+  z-index: 31;
+}
+
+.floatingCenter {
+  position: absolute;
+  top: 50%;
+  left: 270px;
+  right: 270px;
+  margin-top: 0;
+  transform: translateY(-50%);
+  width: auto;
+}
+
+.centerText {
+  text-align: center;
+}
+
+button:focus,
+i:focus {
+  outline: 0;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+}
+
+.iconContainer {
+  padding: 0 10px;
+  border-radius: 4px 0 0 4px;
+}
+
+.iconContainer {
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+}
+
+.contentContainer {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  flex-direction: column;
+  border-radius: 4px;
+}
+
+.info {
+  background-color: #d9f5ff;
+}
+
+.info p{
+  color: #08437a;
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
+.info p button {
+  text-decoration: underline;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.close .icon {color: #08437a;
+  font-size: 22px;
+}
+
+.close .icon.hover:hover:not(.disabled) {
+  cursor: pointer;
+}
