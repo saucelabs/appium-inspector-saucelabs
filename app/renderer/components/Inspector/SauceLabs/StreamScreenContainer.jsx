@@ -12,6 +12,7 @@ import Menu from './Menu';
  *
  * @param {object} streamScreenContainerData
  * @param {function} streamScreenContainerData.applyAppiumMethod
+ * @param {object} streamScreenContainerData.deviceScreenSize
  * @param {number} streamScreenContainerData.deviceScreenSize.height
  * @param {number} streamScreenContainerData.deviceScreenSize.width
  * @param {object} streamScreenContainerData.driverData
@@ -44,7 +45,7 @@ const StreamScreenContainer = ({
   const [clientOffsets, setClientOffsets] = useState(null);
   const [isMouseUsed, setIsMouseUsed] = useState(false);
   const [isTouchStarted, setIsTouchStarted] = useState(false);
-  const [scaleRatio, setScaleRatio] = useState(1);
+  const [scaleRatio, setScaleRatio] = useState(0.8);
   const [touchEnd, setTouchEnd] = useState(null);
   const [touchStart, setTouchStart] = useState(null);
   const [wsRunning, setWsRunning] = useState(false);
@@ -145,36 +146,28 @@ const StreamScreenContainer = ({
   });
 
   return (
-    <>
-      {wsRunning ? (
-        <div className={styles.streamScreenContainer}>
-          <StreamScreen
-            applyAppiumMethod={applyAppiumMethod}
-            canvasContainerRef={canvasContainer}
-            canvasElementRef={canvasElement}
-            canvasLoaded={canvasLoaded}
-            handleSwipeEnd={handleSwipeEnd}
-            handleSwipeMove={handleSwipeMove}
-            handleSwipeStart={handleSwipeStart}
-            isMouseUsed={isMouseUsed}
-            mouseCoordinates={{ xCo, yCo }}
-            onPointerEnter={onPointerEnter}
-            onPointerLeave={onPointerLeave}
-            platformName={platformName}
-          />
-          <Menu
-            applyAppiumMethod={applyAppiumMethod}
-            platformName={platformName}
-            translation={translation}
-          />
-          <Explanation translation={translation} />
-        </div>
-      ) : (
-        <div className={styles.sauceSpinner}>
-          <Spin size="large" />
-        </div>
-      )}
-    </>
+    <div className={styles.streamScreenContainer}>
+      <StreamScreen
+        applyAppiumMethod={applyAppiumMethod}
+        canvasContainerRef={canvasContainer}
+        canvasElementRef={canvasElement}
+        canvasLoaded={canvasLoaded}
+        handleSwipeEnd={handleSwipeEnd}
+        handleSwipeMove={handleSwipeMove}
+        handleSwipeStart={handleSwipeStart}
+        isMouseUsed={isMouseUsed}
+        mouseCoordinates={{ xCo, yCo }}
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
+        platformName={platformName}
+      />
+      <Menu
+        applyAppiumMethod={applyAppiumMethod}
+        platformName={platformName}
+        translation={translation}
+      />
+      <Explanation translation={translation} />
+    </div>
   );
 };
 

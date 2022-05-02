@@ -27,3 +27,44 @@
   border: 1px solid #eee;
   box-shadow: 0px 0px 1px 2px rgb(0 0 0 / 5%);
 }
+
+
+.emptyBackground {
+  align-items: center;
+  background: linear-gradient(-45deg, #069, #08c);
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  margin: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  border: 1px solid #069;
+  box-shadow: 0px 0px 1px 2px rgb(0 102 153 / 5%);
+}
+
+.sauceLogo {
+  flex: 1 1;
+  text-align: center;
+}
+
+.sauceLogoSvg {
+  fill: #007ebd;
+  filter: drop-shadow(0 -1px #0074ad);
+  height: 18vh;
+  width: 18vh;
+}
+
+.loadingText {
+  bottom: 0;
+  color: #fff;
+  font-size: 22px;
+  left: 0;
+  line-height: 1.2;
+  padding: 20px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  z-index: 14;
+}
