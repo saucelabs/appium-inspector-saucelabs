@@ -2,9 +2,3 @@
   display: flex;
   flex: 1;
 }
-.sauceSpinner {
-  display: flex;
-  flex: 1 1 0%;
-  align-items: center;
-  justify-content: center;
-}

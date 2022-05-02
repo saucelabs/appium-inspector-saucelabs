@@ -364,5 +364,8 @@
   "sauceExplanationIssuesList1": "Device Name",
   "sauceExplanationIssuesList2": "OS version",
   "sauceExplanationIssuesList3": "Mobile app or browser",
-  "sauceExplanationIssuesList4": "Data Center (US/EU)"
+  "sauceExplanationIssuesList4": "Data Center (US/EU)",
+  "sauceExplanationReportOne": "If the video is not showing up, then please check the original video stream ",
+  "sauceExplanationReportUrl": "here.",
+  "sauceExplanationReportTwo": "When the video is also not showing up there, then please submit a bug report for Sauce Labs instead of this project."
 }

@@ -7,8 +7,9 @@ import styles from './Explanation.css';
 /**
  *
  * @param {object} translation
+ * @param {string} testReportUrl
  */
-const Explanation = memo(({ translation }) => {
+const Explanation = memo(({ translation, testReportUrl }) => {
   return (
     <Card
       title={
@@ -47,6 +48,26 @@ const Explanation = memo(({ translation }) => {
             <li>{translation('sauceExplanationIssuesList4')}</li>
           </ul>
         </span>
+        {testReportUrl && (
+          <>
+            <span className={styles.text}>
+              {translation('sauceExplanationReportOne')}
+              <a
+                href="#"
+                onClick={(e) =>
+                  e.preventDefault() || shell.openExternal(testReportUrl)
+                }
+              >
+                <LinkOutlined />
+                &nbsp;
+                {translation('sauceExplanationReportUrl')}
+              </a>
+            </span>
+            <span className={styles.text}>
+              {translation('sauceExplanationReportTwo')}
+            </span>
+          </>
+        )}
       </div>
     </Card>
   );
