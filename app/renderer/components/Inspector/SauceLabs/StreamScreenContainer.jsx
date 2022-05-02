@@ -32,7 +32,11 @@ const StreamScreenContainer = ({
   deviceScreenSize,
   driverData: {
     client: {
-      capabilities: { platformName, testobject_device_session_id = '' },
+      capabilities: {
+        platformName,
+        testobject_device_session_id = '',
+        testobject_test_report_url = '',
+       },
     },
   },
   serverData: { accessKey, dataCenter, username },
@@ -165,8 +169,12 @@ const StreamScreenContainer = ({
         applyAppiumMethod={applyAppiumMethod}
         platformName={platformName}
         translation={translation}
+        isActive={canvasLoaded}
       />
-      <Explanation translation={translation} />
+      <Explanation
+        translation={translation}
+        testReportUrl={testobject_test_report_url}
+      />
     </div>
   );
 };
