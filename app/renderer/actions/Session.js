@@ -27,6 +27,8 @@ import { addVendorPrefixes } from '../util';
 import ky from 'ky/umd';
 import moment from 'moment';
 import { APP_MODE } from '../components/Inspector/shared';
+import { ipcRenderer, fs, util } from '../polyfills';
+import { getSaveableState } from '../../main/helpers';
 
 export const NEW_SESSION_REQUESTED = 'NEW_SESSION_REQUESTED';
 export const NEW_SESSION_BEGAN = 'NEW_SESSION_BEGAN';
@@ -40,7 +42,7 @@ export const SET_CAPABILITY_PARAM = 'SET_CAPABILITY_PARAM';
 export const ADD_CAPABILITY = 'ADD_CAPABILITY';
 export const REMOVE_CAPABILITY = 'REMOVE_CAPABILITY';
 export const SWITCHED_TABS = 'SWITCHED_TABS';
-export const SET_CAPS = 'SET_CAPS';
+export const SET_CAPS_AND_SERVER = 'SET_CAPS_AND_SERVER';
 export const SAVE_AS_MODAL_REQUESTED = 'SAVE_AS_MODAL_REQUESTED';
 export const HIDE_SAVE_AS_MODAL_REQUESTED = 'HIDE_SAVE_AS_MODAL_REQUESTED';
 export const SET_SAVE_AS_TEXT = 'SET_SAVE_AS_TEXT';
@@ -72,6 +74,7 @@ export const SET_PROVIDERS = 'SET_PROVIDERS';
 export const SET_ADD_VENDOR_PREFIXES = 'SET_ADD_VENDOR_PREFIXES';
 
 export const SET_STATE_FROM_URL = 'SET_STATE_FROM_URL';
+export const SET_STATE_FROM_SAVED = 'SET_STATE_FROM_SAVED';
 
 const CAPS_NEW_COMMAND = 'appium:newCommandTimeout';
 const CAPS_CONNECT_HARDWARE_KEYBOARD = 'appium:connectHardwareKeyboard';
@@ -79,7 +82,11 @@ const CAPS_NATIVE_WEB_SCREENSHOT = 'appium:nativeWebScreenshot';
 const CAPS_ENSURE_WEBVIEW_HAVE_PAGES = 'appium:ensureWebviewsHavePages';
 const CAPS_INCLUDE_SAFARI_IN_WEBVIEWS = 'appium:includeSafariInWebviews';
 
+const FILE_PATH_STORAGE_KEY = 'last_opened_file';
+
 const AUTO_START_URL_PARAM = '1'; // what should be passed in to ?autoStart= to turn it on
+
+const MJPEG_CAP = 'mjpegScreenshotUrl';
 
 // Multiple requests sometimes send a new session request
 // after establishing a session.
@@ -170,11 +177,11 @@ export function showError(e, methodName, secs = 5) {
 }
 
 /**
- * Change the caps object and then go back to the new session tab
+ * Change the caps object, along with the server details and then go back to the new session tab
  */
-export function setCaps(caps, uuid) {
+export function setCapsAndServer (server, serverType, caps, uuid) {
   return (dispatch) => {
-    dispatch({ type: SET_CAPS, caps, uuid });
+    dispatch({type: SET_CAPS_AND_SERVER, server, serverType, caps, uuid});
   };
 }
 
@@ -214,9 +221,10 @@ export function removeCapability(index) {
   };
 }
 
-function _addVendorPrefixes(caps, dispatch, getState) {
+function _addVendorPrefixes (caps, dispatch, getState) {
+  const {server, serverType, capsUUID} = getState().session;
   const prefixedCaps = addVendorPrefixes(caps);
-  setCaps(prefixedCaps, getState().session.capsUUID)(dispatch);
+  setCapsAndServer(server, serverType, prefixedCaps, capsUUID)(dispatch);
   return prefixedCaps;
 }
 
@@ -408,8 +416,10 @@ export function newSession(caps, attachSessId = null) {
           });
           return;
         }
-        desiredCapabilities.testdroid_source = 'appiumdesktop';
-        desiredCapabilities.testdroid_apiKey = accessKey;
+        desiredCapabilities['bitbar:options'] = {
+          source: 'appiumdesktop',
+          apiKey: accessKey,
+        };
         https = session.server.bitbar.ssl = true;
         break;
       case ServerTypes.kobiton:
@@ -608,11 +618,17 @@ export function newSession(caps, attachSessId = null) {
       } catch (ign) {}
     }
 
+
+    const mjpegScreenshotUrl = desiredCapabilities[`appium:${MJPEG_CAP}`] ||
+      desiredCapabilities[MJPEG_CAP] ||
+      null;
+
+
     // pass some state to the inspector that it needs to build recorder
     // code boilerplate
-    const action = setSessionDetails(
+    const action = setSessionDetails({
       driver,
-      {
+      sessionDetails: {
         desiredCapabilities,
         host,
         port,
@@ -621,21 +637,22 @@ export function newSession(caps, attachSessId = null) {
         accessKey,
         https,
       },
-      mode
-    );
+      mode,
+      mjpegScreenshotUrl,
+    });
     action(dispatch);
     dispatch(push('/inspector'));
   };
 }
 
 /**
- * Saves the caps
+ * Saves the caps and server details
  */
-export function saveSession(caps, params) {
+export function saveSession (server, serverType, caps, params) {
   return async (dispatch) => {
-    let { name, uuid } = params;
-    dispatch({ type: SAVE_SESSION_REQUESTED });
-    let savedSessions = await getSetting(SAVED_SESSIONS);
+    let {name, uuid} = params;
+    dispatch({type: SAVE_SESSION_REQUESTED});
+    let savedSessions = await getSetting(SAVED_SESSIONS) || [];
     if (!uuid) {
       // If it's a new session, add it to the list
       uuid = UUID();
@@ -644,6 +661,8 @@ export function saveSession(caps, params) {
         name,
         uuid,
         caps,
+        server,
+        serverType,
       };
       savedSessions.push(newSavedSession);
     } else {
@@ -651,14 +670,16 @@ export function saveSession(caps, params) {
       for (let session of savedSessions) {
         if (session.uuid === uuid) {
           session.caps = caps;
+          session.server = server;
+          session.serverType = serverType;
         }
       }
     }
     await setSetting(SAVED_SESSIONS, savedSessions);
     const action = getSavedSessions();
     await action(dispatch);
-    dispatch({ type: SET_CAPS, caps, uuid });
-    dispatch({ type: SAVE_SESSION_DONE });
+    dispatch({type: SET_CAPS_AND_SERVER, server, serverType, caps, uuid});
+    dispatch({type: SAVE_SESSION_DONE});
   };
 }
 
@@ -824,7 +845,53 @@ export function setSavedServerParams() {
   };
 }
 
-export function getRunningSessions() {
+export function setStateFromAppiumFile (newFilepath = null) {
+  return async (dispatch) => {
+    // no "fs" means we're not in an Electron renderer so do nothing
+    if (!fs) {
+      return;
+    }
+    try {
+      let filePath = newFilepath;
+      if (!newFilepath) {
+        const lastArg = process.argv[process.argv.length - 1];
+        if (!lastArg.startsWith('filename=')) {
+          return;
+        }
+        filePath = lastArg.split('=')[1];
+      }
+      if (sessionStorage.getItem(FILE_PATH_STORAGE_KEY) === filePath) {
+        // file was opened already, do nothing
+        return;
+      }
+      const appiumJson = JSON.parse(await util.promisify(fs.readFile)(filePath, 'utf8'));
+      sessionStorage.setItem(FILE_PATH_STORAGE_KEY, filePath);
+      dispatch({type: SET_STATE_FROM_SAVED, state: appiumJson, filePath});
+    } catch (e) {
+      notification.error({
+        message: `Cannot open file '${newFilepath}'.\n ${e.message}\n ${e.stack}`,
+      });
+    }
+  };
+}
+
+export function saveFile (filepath) {
+  return async (dispatch, getState) => {
+    const state = getState().session;
+    const filePath = filepath || state.filePath;
+    if (filePath) {
+      const appiumFileInfo = getSaveableState(state);
+      await util.promisify(fs.writeFile)(filePath, JSON.stringify(appiumFileInfo, null, 2), 'utf8');
+      sessionStorage.setItem(FILE_PATH_STORAGE_KEY, filePath);
+    } else {
+      // no filepath provided, tell the main renderer to open the save file dialog and
+      // ask the user to save file to a provided path
+      ipcRenderer.send('save-file-as');
+    }
+  };
+}
+
+export function getRunningSessions () {
   return async (dispatch, getState) => {
     const avoidServerTypes = ['sauce'];
     // Get currently running sessions for this server
