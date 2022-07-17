@@ -1,7 +1,7 @@
 import { DOMParser } from 'xmldom';
 import xpath from 'xpath';
 
-export function parseCoordinates(element) {
+export function parseCoordinates (element) {
   let { bounds, x, y, width, height } = element.attributes || {};
 
   if (bounds) {
@@ -22,7 +22,7 @@ export function parseCoordinates(element) {
   }
 }
 
-export function isUnique(attrName, attrValue, sourceXML) {
+export function isUnique (attrName, attrValue, sourceXML) {
   // If no sourceXML provided, assume it's unique
   if (!sourceXML) {
     return true;
@@ -43,7 +43,7 @@ const STRATEGY_MAPPINGS = [
   ['resource-id', 'id'],
 ];
 
-export function getLocators(attributes, sourceXML) {
+export function getLocators (attributes, sourceXML) {
   const res = {};
   for (let [strategyAlias, strategy] of STRATEGY_MAPPINGS) {
     const value = attributes[strategyAlias];
