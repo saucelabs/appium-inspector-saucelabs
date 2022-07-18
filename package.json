@@ -129,7 +129,7 @@
   "dependencies": {
     "antd": "^4.18.7",
     "bluebird": "^3.5.5",
-    "cheerio": "^1.0.0-rc.3",
+    "cheerio": "^1.0.0-rc.12",
     "connected-react-router": "^6.0.0",
     "electron-debug": "^3.0.0",
     "electron-log": "^4.4.6",
