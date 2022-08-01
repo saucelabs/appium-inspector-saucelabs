@@ -611,13 +611,6 @@ export default class Inspector extends Component {
           <Button
             id="btnClose"
             icon={<CloseOutlined />}
-            onClick={() => quitSession()}
-          />
-        </Tooltip>
-        <Tooltip title={t('quitSessionAndClose')}>
-          <Button
-            id="btnClose"
-            icon={<CloseOutlined />}
             onClick={() => {
               // First close the stream and then close the sess
               if (showSauceStream) {
