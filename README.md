@@ -4,7 +4,12 @@
 
 ---
 
-# IMPORTANT NOTE
+# DEPRECATION NOTICE
+
+This repository will no longer receive updates or new versions.
+[For an enhanced experience on the Sauce Labs platform, we encourage you to check our integrated Appium Inspector solution.](https://docs.dev.saucelabs.net/mobile-apps/features/appium-inspector/)
+
+## IMPORTANT NOTE
 
 This project is a fork of the official [appium-inspector](https://github.com/appium/appium-inspector)-project and holds a few Sauce Labs specific adjustments.
 
@@ -17,10 +22,6 @@ This fork will be updated with all new features/fixes of the original [Appium In
 ## Usage
 
 Follow the instructions [here](#installation). You can download the version you need from the [Releases](https://github.com/saucelabs/appium-inspector-saucelabs/releases)-tab.
-
-## Issues
-
-If you face any issues with this fork then please submit an issue [here](https://github.com/saucelabs/appium-inspector-saucelabs/issues). We will determine if this is a fork specific issue, or an appium-inspector related issue. If it's the latter then we will copy your submitted issue to the official appium-inspector project.
 
 ## Working on this fork
 
@@ -139,9 +140,3 @@ This app shares components and utilities with [Appium Desktop](https://github.co
 ### Localization
 
 We try to use only localized strings (`t('localizationKey')`). If you find yourself needing to add strings, you'll need to do that in the [Appium Desktop repo](https://github.com/appium/appium-desktop)'s English translation file, as the strings for both apps are maintained there for a variety of reasons. Once the string changes have been merged, you can run `npm run copy-en-i18n <path-to-appium-desktop-dir>` to copy them over and commit them as part of your Inspector change.
-
-### Publishing new versions
-
-The version scheme we use for this app is `<RELEASE_YEAR>.<RELEASE_MONTH_NUM>.<RELEASE_COUNT_FOR_MONTH>`. So the first release in the month of April in the year 2022 would be `2022.4.1`, and the 10th in that month would be `2022.4.10`.
-
-Publishing happens via CI (see the scripts in `ci-jobs`), whenever the appropriate git version tags are pushed.
